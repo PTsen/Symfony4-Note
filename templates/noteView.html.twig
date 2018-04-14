@@ -24,7 +24,6 @@
   </div>
 </nav>
 
-
     <body> 
         <h1> Note </h1>
         <div class="container">
@@ -33,8 +32,33 @@
              {{ form_widget(forms) }}          
         {{ form_end(forms) }}
 
-
-        </div>
+       <button id = "tag">Add tag</button>
         
+        </div>
+
+        {% block javascripts %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+        </script>
+          <script type="text/javascript">
+          
+          function wrapText(elementID, openTag, closeTag) { 
+            var textArea = {{forms.note.vars.id}};
+            var len = textArea.value.length;
+            var start = textArea.selectionStart;
+            var end = textArea.selectionEnd;
+            var selectedText = textArea.value.substring(start, end);
+            var replacement = openTag + selectedText + closeTag;
+            textArea.value = (textArea.value.substring(0, start) + replacement + 
+            textArea.value.substring(end, len));
+          } 
+          
+       $('#tag').click(function() { 
+         wrapText("Note", "<tag>", "</tag>"); });
+
+          </script>
+
+          {% endblock %}
+
+          
     </body>
 </html>

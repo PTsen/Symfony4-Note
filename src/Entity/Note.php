@@ -3,10 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\Categorie;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NoteRepository")
+ *  @UniqueEntity(
+ * fields={"title"},
+ * errorPath = "title",
+ * message = "existing title")
  */
 class Note
 {
@@ -17,8 +22,6 @@ class Note
      */
     private $id;
 
-
-   
     /**
      * @ORM\Column(type="string")
      */

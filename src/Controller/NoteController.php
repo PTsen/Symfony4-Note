@@ -36,10 +36,6 @@ class NoteController extends Controller
         $form->handleRequest ($request);
         $note = $form->getData();
 
-
-
-        
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em=$this->getDoctrine()->getManager();
@@ -122,5 +118,5 @@ return $this->render('noteView.html.twig',array('forms'=>$form->createView())) ;
         
     }
 
-
 }
+    
