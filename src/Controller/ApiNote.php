@@ -20,6 +20,9 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+use Symfony\Component\DomCrawler\Crawler;
+
+
 class ApiNote extends Controller
 {
     
@@ -55,7 +58,6 @@ class ApiNote extends Controller
      */
     public function create(Request $request)
     {
-
 
         $data = $request->getContent();
         $elem = json_decode($data,true);
@@ -117,6 +119,7 @@ class ApiNote extends Controller
         $elem = json_decode($data,true);
         $id = $elem['id'];
         $entityManager = $this->getDoctrine()->getManager();
+
         try {
 
             $note = $entityManager-> getRepository (Note::class)->find($id);
@@ -144,6 +147,47 @@ class ApiNote extends Controller
  
             return $this->redirectToRoute('notes');
 
+    }
+
+     /**
+     * @Route("/api/note/search", name="api_note_search")
+     * @Method("POST")
+     */
+    public function search_(Request $request)
+    {
+        $data = $request->getContent();
+        $elem = json_decode($data,true);
+        $tag = $elem['tag'];
+        $entityManager = $this->getDoctrine()->getManager();
+        $em = $entityManager-> getRepository (Note::class)->findall();
+        $tab = array();
+
+            foreach($em as $note) { 
+              
+                $xmlCrawler = new Crawler();
+                $xmlCrawler->addXmlContent($note->getNote());
+                $txt=" ";
+
+                try {
+    
+                    if( $xmlCrawler->filterXPath('//note/tag')->count()){
+                        $txt = $xmlCrawler->filterXPath('//note/tag')->text();
+                    }
+
+                }catch (\Exception $ex){
+                    return $this->render('sqlError.html.twig',array('name'=>$ex)) ;   
+                }
+    
+                if ($txt == $tag){
+                    array_push($tab, $note);   
+                    echo $note->getNote();           
+                }       
+
+            }
+
+           //$em=$tab;
+
+           return new Response(' ', Response::HTTP_CREATED);
     }
 }
 
