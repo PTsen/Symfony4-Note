@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DomCrawler\Crawler;
+
 
 
 class NoteController extends Controller
@@ -36,7 +38,15 @@ class NoteController extends Controller
         $form->handleRequest ($request);
         $note = $form->getData();
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $xmlText = '<?xml version="1.0" encoding="UTF-8"?> ';
+            $xmlText .= '<note> ';
+            $xmlText .= $note->getNote() ;
+            $xmlText .= '</note> ';
+            $note->setNote( $xmlText);
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($note);
@@ -53,16 +63,48 @@ class NoteController extends Controller
     /**
      * @Route("/notes", name="notes")
      */
-    public function select()
+    public function select(Request $request)
     {
 
+        $tab = array();
         $em = $this -> getDoctrine() 
         -> getRepository (Note::class)->findall();
-       
-        return $this->render('listNotes.html.twig',array('notes'=>$em)) ; 
+        
+        
+        $data = array('message' => 'Search tag');
+        $form = $this->createFormBuilder($data)
+        ->add('Tag', TextType::class)
+        ->add('Search', SubmitType::class)
+        ->getForm();
+        $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $tag=$form->get('Tag')->getData();
+
+        foreach($em as $note) { 
+              
+            $xmlCrawler = new Crawler();
+            $xmlCrawler->addXmlContent($note->getNote());
+            $txt=" ";
+            try {
+
+            if( $xmlCrawler->filterXPath('//note/tag')->count()){
+                $txt = $xmlCrawler->filterXPath('//note/tag')->text();
+            }
+            }catch (\Exception $ex){
+            return $this->render('sqlError.html.twig',array('name'=>$ex)) ;   
+            }
+
+            if ($txt == $tag){
+                array_push($tab, $note);              
+            }        
+        }
+        $em=$tab;        
+    }       
+      
+    return $this->render('listNotes.html.twig',array('notes'=>$em, 'search'=>$form->createView())) ; 
         
     }
-
 
       /**
      * @Route("/delNote", name="delNotes")
