@@ -1,0 +1,44 @@
+h2 {
+
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: rgb(115,102,127);
+
+}
+
+.categories {
+    
+    margin: 0 0 2em 0;
+    list-style-type: none;
+    padding: 0;
+    width: 5em;    
+  }
+
+  .categories
+ .badge {
+    display: inline-block;
+    font-size: medium;
+    color: white;
+    padding: 0.8em 0.7em 0 0.7em;
+    background-color: #607D8B;
+    line-height: 1em;
+    position: relative;
+    
+    left: -1px;
+    top: -4px;
+    height: 1.8em;
+    margin-right: 1.8em;
+    margin-left: 10 px;
+    margin-bottom: -10px;
+    border-radius: 4px 0 0 4px;
+  }
+.categories
+::placeholder {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: rgb(241, 236, 236);
+    opacity: 1; 
+}
+
+
+
+
+  

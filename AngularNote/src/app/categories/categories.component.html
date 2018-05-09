@@ -1,0 +1,16 @@
+<h2>List of categorie</h2>
+<ul class = "categories">
+<li *ngFor="let categorie of categories">
+ 
+      <input class ="badge" [(ngModel)]="categorie.categorie" /><br>
+
+   <button   type="button" (click)="onUpdate(categorie)"> 
+    <img src="assets/img/save.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+   </button>
+   <button type="button" (click)="onDelete(categorie)"> 
+      <img src="assets/img/trash.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>   
+  </button>
+ </li>
+</ul>
+
+

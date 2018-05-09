@@ -19,11 +19,11 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class ApiCategorie extends Controller
+class ApiCategorieAngular extends Controller
 {
     
     /**
-     * @Route("/api/categorie/list", name="api_categorie_list")
+     * @Route("/apiAngular/categorie/list", name="apiAngular_categorie_list")
      * @Method({"GET","OPTIONS"})
      */
     public function select(Request $request)
@@ -60,10 +60,10 @@ class ApiCategorie extends Controller
     }
 
  /**
-     * @Route("/api/categorie/create", name="api_categorie_create")
+     * @Route("/apiAngular/categorie/create", name="apiAngular_categorie_create")
      * @Method({"POST","OPTIONS"})
      */
-    public function create(Request $request,string $cat)
+    public function create(Request $request)
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
@@ -79,9 +79,8 @@ class ApiCategorie extends Controller
         }else{
 
             $data = $request->getContent();
-            $elem = json_decode($data,true);
-            $cat=new Categorie();
-            $cat->setCategorie($elem['categorie']);
+           $cat=new Categorie();
+            $cat->setCategorie($data);
             $em=$this->getDoctrine()->getManager();
 
             try{
@@ -93,17 +92,21 @@ class ApiCategorie extends Controller
                     'status'=>'500',
                     'message'=>'Content is not valid'));
             }
+            $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
+            $response->setContent($data);
+
         }
+
         return $response;
     }
 
     
     /**
-     * @Route("/api/categorie/delete/{id}", name="api_categorie_delete")
+     * @Route("/apiAngular/categorie/delete/{id}", name="apiAngular_categorie_delete")
      * @Method({"DELETE","OPTIONS"})
      */
     public function delet_(Request $request, $id)
@@ -146,7 +149,7 @@ class ApiCategorie extends Controller
 
 
       /**
-     * @Route("/api/categorie/put", name="api_categorie_put")
+     * @Route("/apiAngular/categorie/put", name="apiAngular_categorie_put")
      * @Method({"PUT","OPTIONS"})
      */
     public function update_(Request $request)

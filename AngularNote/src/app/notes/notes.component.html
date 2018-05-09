@@ -1,0 +1,19 @@
+<h2>List of note </h2>
+
+
+<ul class = "notes">
+  <li *ngFor="let note of notes"  (click)="onSelect(note)" > 
+      <span class ="badge"> 
+        {{note.title}}
+      </span>
+      <span class ="cat"> 
+        {{note.categorie.categorie}}
+      </span>
+      <span [innerHTML]="note.note"></span>
+
+    </li>
+</ul>
+
+<app-note-detail [note]="selectedNote" [notes]="notes" (close)="closeDelete($event)"> </app-note-detail>
+
+

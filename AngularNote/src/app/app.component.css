@@ -1,0 +1,58 @@
+body {
+    background-color: rgb(148,148,184);
+
+}
+
+.home {
+    margin: 0 0 2em 0;
+    list-style-type: none;
+    padding: 0;
+    background: rgb(148,148,184);
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+
+  }
+
+
+.div h1{
+
+    margin: 0 0 2em 0;
+    list-style-type: none;
+    padding: 0;
+    color: rgb(115,102,127);
+    font-size: xx-large;
+    text-align  :center;
+    border: 3px dashed black;
+    background: rgb(148,148,184);
+
+
+}
+  
+.nave a:link {
+    color: rgb(115,102,127);
+    border: 1px solid black;
+    text-decoration: none;
+    background: rgb(230,204,255);
+
+
+
+    }
+.nave
+   a:visited {
+    color: rgb(115,102,127);
+    text-decoration: none;
+    }
+.nave 
+   a:active {
+    color: rgb(115,102,127);
+    text-decoration: none;
+   }
+.nave
+   a:hover {
+    color: rgb(173, 142, 202);
+    text-decoration: none;
+   }
+
+ 
+
+  

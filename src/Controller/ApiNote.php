@@ -16,9 +16,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+/*
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+*/
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -28,26 +30,90 @@ class ApiNote extends Controller
     
     /**
      * @Route("/api/note/list", name="api_note_list")
-     * @Method("GET")
+     * @Method({"GET","OPTIONS"})
      */
     public function select(Request $request)
     {
 
-        $em = $this -> getDoctrine() 
-        -> getRepository (Note::class)->findall();
-        $encoder = array(new JsonEncoder());
-        $normalizers= array(new ObjectNormalizer());
-        $serializer = new Serializer ($normalizers,$encoder);
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 
-        $data =  $serializer->serialize($em, 'json');
-        
-        $response = new JsonResponse();
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        
-        $response->setContent($data);
+            $response = new Response();
 
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
+
+
+        }else{
+
+            $em = $this -> getDoctrine() 
+            -> getRepository (Note::class)->findall();
+
+            /*
+            $encoder = array(new JsonEncoder());
+            $normalizers= array(new ObjectNormalizer());
+            $serializer = new Serializer ($normalizers,$encoder);
+            $data =  $serializer->serialize($em, 'json');
+            */
+
+            $data = $this->get('serializer')->serialize($em, 'json');
+
+
+            $response = new JsonResponse();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+
+        
+            $response->setContent($data);
+        }
+        return $response;
+        
+    }
+
+
+        
+    /**
+     * @Route("/api/note/get/{id}", name="api_note_get")
+     * @Method({"GET","OPTIONS"})
+     */
+    public function getById(Request $request,$id)
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
+
+            $response = new Response();
+
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
+
+
+        }else{
+
+            $em = $this -> getDoctrine() 
+            -> getRepository (Note::class)->find($id);
+
+            /*
+            $encoder = array(new JsonEncoder());
+            $normalizers= array(new ObjectNormalizer());
+            $serializer = new Serializer ($normalizers,$encoder);
+            $data =  $serializer->serialize($em, 'json');
+            */
+
+            $data = $this->get('serializer')->serialize($em, 'json');
+
+
+            $response = new JsonResponse();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+
+        
+            $response->setContent($data);
+        }
         return $response;
         
     }
@@ -85,25 +151,49 @@ class ApiNote extends Controller
 
     
     /**
-     * @Route("/api/note/delete", name="api_note_delete")
-     * @Method("DELETE")
+     * @Route("/api/note/delete/{id}", name="api_note_delete")
+     * @Method({"DELETE","OPTIONS"})
      */
-    public function delet_(Request $request)
+    public function delet_(Request $request,$id)
     {
-        $data = $request->getContent();
-        $elem = json_decode($data,true);
-        $id = $elem['id'];
-        $entityManager = $this->getDoctrine()->getManager();
-        $em = $entityManager-> getRepository (Categorie::class)->find($id);
-        try {
-        $entityManager->remove($em);
-        $entityManager->flush();
-        }catch (\Exception $ex){
+		
+		 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 
-        return $this->render('sqlError.html.twig',array('name'=>$ex)) ; 
+            $response = new Response();
 
-        }
-        return $this->redirectToRoute('notes');
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
+			
+			return $response;
+
+        }else{
+			
+			$data = $request->getContent();
+			$elem = json_decode($data,true);
+			
+			$entityManager = $this->getDoctrine()->getManager();
+			$em = $entityManager-> getRepository (Note::class)->find($id);
+			try {
+				
+				$entityManager->remove($em);
+				$entityManager->flush();
+			}catch (\Exception $ex){
+			
+                $response = new JsonResponse(array(
+                    'status'=>'500',
+                    'message'=>'Content is not valid'));
+     
+            }
+            
+            $response = new JsonResponse();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+		}
+	
+		return $response;
 
         
     }

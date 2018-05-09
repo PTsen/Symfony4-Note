@@ -1,0 +1,20 @@
+<div *ngIf="note">
+  <h2 >{{ note.title | uppercase }} Details</h2>
+  
+  <ul class = "detail">
+    <div> Note : <span [innerHTML]="note.note" >  </span></div>
+    <div>
+     Categorie : {{note.categorie.categorie}} <br>
+
+      Date : {{ note.date | date : 'yyyy/MM/dd' }} 
+    </div>
+
+    <button type="button" [routerLink]="['/noteUpdate', note.id]"> 
+      <img src="assets/img/update.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>   
+    </button>
+    <button type="button" (click)="onDelete(note)">
+        <img src="assets/img/trash.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>   
+    </button>
+  </ul>
+</div>
+

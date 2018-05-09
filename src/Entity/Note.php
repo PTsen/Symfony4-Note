@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\Categorie;
+use JMS\Serializer\Annotation as Serializer;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NoteRepository")
@@ -28,6 +30,7 @@ class Note
     private $note;
     /**
      * @ORM\Column(type="date")
+     * @Serializer\Type("DateTime<'Y-m-d'>")
      */
     private $date;
 

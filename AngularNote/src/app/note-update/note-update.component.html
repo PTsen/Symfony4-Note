@@ -1,0 +1,35 @@
+<h2>Edit note 
+ 
+</h2>
+<div *ngIf="note$ | async as note">
+  <ul class = "up">
+    <div>
+      <label>Id: </label>{{ note.id }}</div>
+    <input [(ngModel)]="note.title" placeholder="title"/><br>
+    <input [(ngModel)]="note.note" placeholder="note"/><br>
+
+     <form class="form-inline">
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd"
+                   name="dp" [(ngModel)]="note.date" ngbDatepicker #d="ngbDatepicker">
+            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+              <img src="assets/img/calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+            </button>
+             
+          </div>
+        </div>
+      </form>
+
+
+      <select class="form-control" required  [(ngModel)]="note.categorie" name="categorie">
+          <option *ngFor="let cat of categories" [value]="cat.id" >{{cat.categorie}}</option>
+      </select>
+      <br>
+      <button class="btn btn-outline-secondary" (click)="save(note)" type="button">
+        <img src="assets/img/save.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+      </button>
+  </ul>
+</div>
+
+ 
