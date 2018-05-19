@@ -238,6 +238,10 @@ class ApiNoteAngular extends Controller
 
                 $note = $entityManager-> getRepository (Note::class)->find($elem['id']);
                 $note->setTitle($elem['title']);
+                
+                $note->setNote($elem['note']);
+                $entityManager->flush();
+
 
                 if(isset($elem['categorie'])){
                     $cate = $this -> getDoctrine()
@@ -248,14 +252,13 @@ class ApiNoteAngular extends Controller
                 $date =  new DateTime($elem['date']);
                 $note->setDate($date);
 
-                $note->setNote($elem['note']);
                 $entityManager->flush();
-            
             }catch (\Exception $ex){
 
                 $response = new JsonResponse(array(
                     'status'=>'500',
-                    'message'=>'Content is not valid'));
+                    'message'=>$ex));
+
                     return $response;
             }            
 
@@ -264,9 +267,7 @@ class ApiNoteAngular extends Controller
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-
         }
- 
         return $response;
 
     }
