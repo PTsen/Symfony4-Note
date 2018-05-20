@@ -86,11 +86,11 @@ class CategorieController extends Controller
     public function update_(Request $request)
     {
 
-        $id = $request ->query->get('id_');
+        $id = $request ->query->get('id-');
         $entityManager = $this->getDoctrine()->getManager();
         $em = $entityManager-> getRepository (Categorie::class)->find($id);
         $form = $this->createFormBuilder($em)
-        ->add('categorie ',TextType::class,array('label'=>'Categorie ')) //zone de text pour écrire
+        ->add('categorie',TextType::class,array('label'=>'Categorie ')) //zone de text pour écrire
         ->add('save',SubmitType::class,array('label'=>'Save')) // bouton de soummision de forme
         ->getForm();
 $form->handleRequest ($request);

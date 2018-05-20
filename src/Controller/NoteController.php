@@ -18,6 +18,16 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class NoteController extends Controller
 {
+
+/**
+ * @Route("/",name="home")
+ */
+    public function home(){
+        return $this->render('homePage.html.twig') ;     
+
+    }
+
+
     /**
      * @Route("/addnote", name="addnote")
      */
@@ -61,7 +71,7 @@ class NoteController extends Controller
 
 
     /**
-     * @Route("/notes", name="notes")
+     * @Route("notes", name="notes")
      */
     public function select(Request $request)
     {

@@ -11,7 +11,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="addnote "style ="background-color:  #e6ccff">Add Note</a>
+        <a class="nav-link" href="addnote"style ="background-color:  #e6ccff">Add Note</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="notes"style ="background-color:  #e6ccff">Note List </a>
@@ -30,7 +30,7 @@
        {% block body %}
        {% for category in categories %}
             {{category.categorie}} | 
-            <a href=updateCat?id_={{category.id}}> Update </a> |
+            <a href=updateCat?id-={{category.id}}> Update </a> |
             <a href=delCat?id_={{category.id}}> Delete</a> |
 
             </br>
