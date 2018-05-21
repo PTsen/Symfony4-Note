@@ -7,6 +7,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
+ * Creation of category ORM
  * @ORM\Entity(repositoryClass="App\Repository\CategorieRepository")
  * @UniqueEntity(
  * fields={"cate"},

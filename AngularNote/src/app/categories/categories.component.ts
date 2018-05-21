@@ -4,6 +4,10 @@ import { CategoriesRestService } from '../categories-rest.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 
+/**
+ * Component that display and update or delete a category
+ */
+
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',

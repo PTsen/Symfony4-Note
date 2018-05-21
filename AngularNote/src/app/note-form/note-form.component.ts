@@ -6,6 +6,9 @@ import { NoteRestService } from '../note-rest.service';
 import { CategoriesRestService } from '../categories-rest.service';
 import { Router } from '@angular/router';
 
+/**
+ * Component that create a new note
+ */
 
 @Component({
   selector: 'app-note-form',

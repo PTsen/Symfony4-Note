@@ -10,6 +10,10 @@ const httpOptions = {
   
 };
 
+/**
+* Note service that connect to the Note API REST from Symfony 
+*/
+
 @Injectable()
 export class NoteRestService {
 

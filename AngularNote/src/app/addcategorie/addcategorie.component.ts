@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CategoriesRestService } from '../categories-rest.service';
 import { Router} from '@angular/router';
 
+/**
+* Component that add a category
+*/
 
 @Component({
   selector: 'app-addcategorie',

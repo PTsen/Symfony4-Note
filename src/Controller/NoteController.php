@@ -14,14 +14,17 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DomCrawler\Crawler;
 
-
+/**
+* Class that manage everything about a note
+*/
 
 class NoteController extends Controller
 {
 
-/**
- * @Route("/",name="home")
- */
+    /**
+    * Home page
+    * @Route("/",name="home")
+    */
     public function home(){
         return $this->render('homePage.html.twig') ;     
 
@@ -29,26 +32,26 @@ class NoteController extends Controller
 
 
     /**
-     * @Route("/addnote", name="addnote")
+     * Function that manage to add a note in the DATABAS
+     * #param Request, this parametre define the submission of a note
+     *  @Route("/addnote", name="addnote")
      */
     public function add(Request $request)
     {
 
         $note = new Note();
         $form = $this->createFormBuilder($note)
-                ->add('title',TextType::class,array('label'=>'Title')) //zone de text pour écrire
+                ->add('title',TextType::class,array('label'=>'Title'))
                 ->add('note',TextType::class,array('label'=>'Note '))
-                ->add('date',DateType::class,array('label'=>'Due Date ')) // liste déroulante pour save date
+                ->add('date',DateType::class,array('label'=>'Due Date '))
                 ->add('categorie',EntityType::class,array(
                     'class' => Categorie::class,
                     'choice_label' => 'categorie',
                 ))
-                ->add('save',SubmitType::class,array('label'=>'Save')) // bouton de soummision de forme
+                ->add('save',SubmitType::class,array('label'=>'Save')) 
                 ->getForm();
         $form->handleRequest ($request);
         $note = $form->getData();
-
-
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -71,6 +74,11 @@ class NoteController extends Controller
 
 
     /**
+     * Function that display all notes from the database
+     * It create the search field for the tag
+     * If the search is performed, all notes that are in the search scope 
+     * is displayed
+     * #param Request, determine if the search should be performed
      * @Route("notes", name="notes")
      */
     public function select(Request $request)
@@ -79,7 +87,6 @@ class NoteController extends Controller
         $tab = array();
         $em = $this -> getDoctrine() 
         -> getRepository (Note::class)->findall();
-        
         
         $data = array('message' => 'Search tag');
         $form = $this->createFormBuilder($data)
@@ -116,7 +123,9 @@ class NoteController extends Controller
         
     }
 
-      /**
+    /**
+     * Function that delete a note
+     * #param Request, the id of tne note
      * @Route("/delNote", name="delNotes")
      */
     public function delet_(Request $request)
@@ -138,9 +147,11 @@ class NoteController extends Controller
         
     }
 
-  /**
-     * @Route("/updateNote", name="updateNote")
-     */
+    /** 
+    * Function that update a note
+    * #param Request, id of the note
+    * @Route("/updateNote", name="updateNote")
+    */
     public function update_(Request $request)
     {
 

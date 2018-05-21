@@ -17,16 +17,20 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+* Class for Category API REST
+*/
+
 class ApiCategorie extends Controller
 {
     
     /**
-     * @Route("/api/categorie/list", name="api_categorie_list")
-     * @Method("GET")
-     */
+    * Function that get all categories from database
+    * @Route("/api/categorie/list", name="api_categorie_list")
+    * @Method("GET")
+    */
     public function select(Request $request)
     {
-
 
         $em = $this -> getDoctrine() 
         -> getRepository (Categorie::class)->findall();
@@ -40,14 +44,15 @@ class ApiCategorie extends Controller
         $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
         $response->setContent($data);
         return $response;
-        
     }
 
- /**
-     * @Route("/api/categorie/create", name="api_categorie_create")
-     * @Method("POST")
-     */
-    public function create(Request $request,string $cat)
+    /**
+    *Function that create a category
+    * #param Request, category that need to be created
+    * @Route("/api/categorie/create", name="api_categorie_create")
+    * @Method("POST")
+    */
+    public function create(Request $request)
     {
 
        
@@ -59,14 +64,17 @@ class ApiCategorie extends Controller
             $em=$this->getDoctrine()->getManager();
 
             try{
+
                 $em->persist($cat);
                 $em->flush();
+
             }catch(\Exception $ex){
 
                 $response = new JsonResponse(array(
                     'status'=>'500',
                     'message'=>'Content is not valid'));
             }
+
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -77,9 +85,11 @@ class ApiCategorie extends Controller
 
     
     /**
-     * @Route("/api/categorie/delete/{id}", name="api_categorie_delete")
-     * @Method("DELETE")
-     */
+    * Function that delete a category whit his id
+    * #param id, the id
+    * @Route("/api/categorie/delete/{id}", name="api_categorie_delete")
+    * @Method("DELETE")
+    */
     public function delet_(Request $request, $id)
     {
 
@@ -109,18 +119,19 @@ class ApiCategorie extends Controller
     }
 
 
-      /**
-     * @Route("/api/categorie/put", name="api_categorie_put")
-     * @Method("PUT")
-     */
+    /**
+    * Function that update a category
+    * #param, Request the category and new data 
+    * @Route("/api/categorie/put", name="api_categorie_put")
+    * @Method("PUT")
+    */
     public function update_(Request $request)
     {
-		
-
         $data = $request->getContent();
         $elem = json_decode($data,true);
         $id = $elem['id'];
         $entityManager = $this->getDoctrine()->getManager();
+     
         try {
 
             $em = $entityManager-> getRepository (Categorie::class)->find($id);

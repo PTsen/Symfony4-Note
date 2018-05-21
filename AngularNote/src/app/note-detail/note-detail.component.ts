@@ -6,6 +6,11 @@ import { EventEmitter } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 
+/**
+ * Component that display more detail about a note
+ * The note can be delete
+ */
+
 @Component({
   selector: 'app-note-detail',
   templateUrl: './note-detail.component.html',

@@ -10,6 +10,10 @@ const httpOptions = {
   
 };
 
+/**
+* Category service that connect to the Category API REST from Symfony 
+*/
+
 @Injectable()
 export class CategoriesRestService {
 

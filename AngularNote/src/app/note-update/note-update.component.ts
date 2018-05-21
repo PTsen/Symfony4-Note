@@ -10,6 +10,9 @@ import { Observable } from 'rxjs/Observable';
 import { format } from 'url';
 
 
+/**
+ * Component that update a note
+ */
 
 @Component({
   selector: 'app-note-update',

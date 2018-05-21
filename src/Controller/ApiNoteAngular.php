@@ -8,30 +8,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use \DateTime;
-
 use App\Entity\Note;
 use App\Entity\Categorie;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
-/*
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-*/
-
-use Symfony\Component\DomCrawler\Crawler;
 
 
+/**
+ * Class for Note API REST in Angular
+ */
 class ApiNoteAngular extends Controller
 {
     
     /**
-     * @Route("/apiAngular/note/list", name="apiAngular_note_list")
-     * @Method({"GET","OPTIONS"})
-     */
+    * Function that get all notes from database
+    * @Route("/apiAngular/note/list", name="apiAngular_note_list")
+    * @Method({"GET","OPTIONS"})
+    */
     public function select(Request $request)
     {
 
@@ -49,25 +43,14 @@ class ApiNoteAngular extends Controller
 
             $em = $this -> getDoctrine() 
             -> getRepository (Note::class)->findall();
-
-            /*
-            $encoder = array(new JsonEncoder());
-            $normalizers= array(new ObjectNormalizer());
-            $serializer = new Serializer ($normalizers,$encoder);
-            $data =  $serializer->serialize($em, 'json');
-            */
-
             $data = $this->get('serializer')->serialize($em, 'json');
-
-
             $response = new JsonResponse();
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-
-        
             $response->setContent($data);
         }
+
         return $response;
         
     }
@@ -75,16 +58,17 @@ class ApiNoteAngular extends Controller
 
         
     /**
-     * @Route("/apiAngular/note/get/{id}", name="apiAngular_note_get")
-     * @Method({"GET","OPTIONS"})
-     */
+    * Function that query a note with his id
+    * #param id, the id
+    * @Route("/apiAngular/note/get/{id}", name="apiAngular_note_get")
+    * @Method({"GET","OPTIONS"})
+    */
     public function getById(Request $request,$id)
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 
             $response = new Response();
-
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -95,56 +79,53 @@ class ApiNoteAngular extends Controller
 
             $em = $this -> getDoctrine() 
             -> getRepository (Note::class)->find($id);
-
             $data = $this->get('serializer')->serialize($em, 'json');
-
-
             $response = new JsonResponse();
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-
-        
             $response->setContent($data);
         }
         return $response;
         
     }
 
- /**
-     * @Route("/apiAngular/note/create", name="apiAngular_note_create")
-     * @Method({"POST","OPTIONS"})
-     */
+    /**
+    * Function that create a note 
+    * #param Request, note that need to be created
+    * @Route("/apiAngular/note/create", name="apiAngular_note_create")
+    * @Method({"POST","OPTIONS"})
+    */
     public function create(Request $request)
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 
             $response = new Response();
-
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
 
         }else{
+
             $data = $request->getContent();
             $elem = json_decode($data,true);
             $note=new Note();
-
             $cate = $this -> getDoctrine()
             -> getRepository (Categorie::class)->find($elem['categorie']);
-
             $note->setCategorie($cate);
             $date =  new DateTime($elem['date']);
             $note->setDate($date);
             $note->setNote($elem['note']);
             $note->setTitle($elem['title']);
             $em=$this->getDoctrine()->getManager();
-
+           
             try{
+           
                 $em->persist($note);
                 $em->flush();
+           
             }catch(\Exception $ex){
 
                 $response = new JsonResponse(array(
@@ -157,7 +138,8 @@ class ApiNoteAngular extends Controller
 
     
     /**
-     * Function qui supprime une note
+     * Function that delete a note whit his id
+     * #param id, the id
      * @Route("/apiAngular/note/delete/{id}", name="apiAngular_note_delete")
      * @Method({"DELETE","OPTIONS"})
      */
@@ -199,16 +181,13 @@ class ApiNoteAngular extends Controller
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
 		}
-	
 		return $response;
-
-        
     }
 
 
      /**
-     * Fonction s occupe de la modification d une note.
-     * #param, Request la note qui doit etre modifie 
+     * Function that update a note
+     * #param, Request the note and new data 
      * @Route("/apiAngular/note/put", name="apiAngular_note_put")
      *  @Method({"PUT","OPTIONS"})
      */

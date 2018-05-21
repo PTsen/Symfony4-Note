@@ -16,8 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class CategorieController extends Controller
 {
     /**
-     * @Route("/addcategorie", name="addcategorie")
-     */
+    * Function that add a category in the database
+    * #param Request, determine the submission of a category
+    * @Route("/addcategorie", name="addcategorie")
+    */
     public function addCategorie(Request $request)
     {
 
@@ -45,9 +47,10 @@ class CategorieController extends Controller
 
 
     /**
-     * @Route("/categories", name="categories")
-     */
-    public function select(Request $request)
+    * Function that display categories
+    * @Route("/categories", name="categories")
+    */
+    public function select()
     {
 
         $em = $this -> getDoctrine() 
@@ -58,8 +61,10 @@ class CategorieController extends Controller
     }
     
     /**
-     * @Route("/delCat", name="delCat")
-     */
+    * Function that delete a category
+    * #param Request, id of the catagory
+    * @Route("/delCat", name="delCat")
+    */
     public function delet_(Request $request)
     {
 
@@ -80,9 +85,11 @@ class CategorieController extends Controller
     }
 
 
-      /**
-     * @Route("/updateCat", name="updateCat")
-     */
+    /**
+    * Function that update a category
+    * #param Request, if of the category 
+    * @Route("/updateCat", name="updateCat")
+    */
     public function update_(Request $request)
     {
 
@@ -93,16 +100,14 @@ class CategorieController extends Controller
         ->add('categorie',TextType::class,array('label'=>'Categorie ')) //zone de text pour écrire
         ->add('save',SubmitType::class,array('label'=>'Save')) // bouton de soummision de forme
         ->getForm();
-$form->handleRequest ($request);
+        $form->handleRequest ($request);
 
-if ($form->isSubmitted() && $form->isValid()) {
-    $entityManager->flush();
-    return $this->redirectToRoute('categories');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('categories');
+        }
 
-}
-return $this->render('categorieView.html.twig',array('forms'=>$form->createView()));
-
-
+        return $this->render('categorieView.html.twig',array('forms'=>$form->createView()));
     }
 }
 

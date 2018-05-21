@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 
 
 /**
+ * Creation of note ORM
  * @ORM\Entity(repositoryClass="App\Repository\NoteRepository")
  *  @UniqueEntity(
  * fields={"title"},
@@ -90,8 +91,6 @@ class Note
          $this->categorie = $cat;
 
     }
-
-
 
     public function getId(){
 

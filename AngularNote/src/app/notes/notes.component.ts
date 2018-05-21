@@ -4,6 +4,10 @@ import { NoteRestService } from '../note-rest.service';
 import {Note} from '../note'
 
 
+/**
+ * Component that display all notes
+ */
+
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',

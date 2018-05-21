@@ -15,11 +15,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
+/**
+ *  Class for Note API REST 
+ */
 
 class ApiNote extends Controller
 {
     
     /**
+    * Function that get all notes from database
      * @Route("/api/note/list", name="api_note_list")
      * @Method("GET")
      */
@@ -39,10 +43,12 @@ class ApiNote extends Controller
     }
 
 
- /**
-     * @Route("/api/note/create", name="api_note_create")
-     * @Method("POST")
-     */
+    /**
+    * Function that create a note 
+    * #param Request, note that need to be created
+    * @Route("/api/note/create", name="api_note_create")
+    * @Method("POST")
+    */
     public function create(Request $request)
     {
 
@@ -57,9 +63,12 @@ class ApiNote extends Controller
         $note->setNote($elem['note']);
         $note->setTitle($elem['title']);
         $em=$this->getDoctrine()->getManager();
+        
         try{
-        $em->persist($note);
-        $em->flush();
+        
+            $em->persist($note);
+            $em->flush();
+        
         }catch(\Exception $ex){
 
             $response = new JsonResponse(array(
@@ -78,23 +87,26 @@ class ApiNote extends Controller
 
     
     /**
-     * @Route("/api/note/delete/{id}", name="api_note_delete")
-     * @Method("DELETE")
-     */
+    * Function that delete a note whit his id
+    * #param id, the id
+    * @Route("/api/note/delete/{id}", name="api_note_delete")
+    * @Method("DELETE")
+    */
     public function delet_(Request $request,$id)
     {
 		
 			
 			$data = $request->getContent();
-			$elem = json_decode($data,true);
-			
+			$elem = json_decode($data,true);			
 			$entityManager = $this->getDoctrine()->getManager();
 			$em = $entityManager-> getRepository (Note::class)->find($id);
-			try {
+            
+            try {
 				
 				$entityManager->remove($em);
 				$entityManager->flush();
-			}catch (\Exception $ex){
+            
+            }catch (\Exception $ex){
 			
                 $response = new JsonResponse(array(
                     'status'=>'500',
@@ -113,12 +125,15 @@ class ApiNote extends Controller
     }
 
 
-      /**
-     * @Route("/api/note/put", name="api_note_put")
-     * @Method("PUT")
-     */
+    /**
+    * Function that update a note
+    * #param, Request the note and new data 
+    * @Route("/api/note/put", name="api_note_put")
+    * @Method("PUT")
+    */
     public function update_(Request $request)
     {
+        
         $data = $request->getContent();
         $elem = json_decode($data,true);
         $id = $elem['id'];
@@ -127,25 +142,30 @@ class ApiNote extends Controller
         try {
 
             $note = $entityManager-> getRepository (Note::class)->find($id);
-
+            
             if(isset($elem['categorie'])){
-            $cate = $this -> getDoctrine()
+                $cate = $this -> getDoctrine()
             -> getRepository (Categorie::class)->find($elem['categorie']);
             $note->setCategorie($cate);
             }
+            
             if(isset($elem['date'])){
-            $date =  new DateTime($elem['date']);
-            $note->setDate($date);
+                $date =  new DateTime($elem['date']);
+                $note->setDate($date);
             }
+            
             if(isset($elem['note'])){
-            $note->setNote($elem['note']);
+                $note->setNote($elem['note']);
             }
+            
             if(isset($elem['title'])){
-            $note->setTitle($elem['title']);
+                $note->setTitle($elem['title']);
             }
+            
             $entityManager->flush();
             
         }catch (\Exception $ex){
+            
             $response = new JsonResponse(array(
                 'status'=>'500',
                 'message'=>'Content is not valid')); 
