@@ -1,5 +1,4 @@
-
-h2 {
+  h2 {
 
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   color: rgb(115,102,127);
@@ -7,22 +6,16 @@ h2 {
  }
  
 .categories {
-    margin: 0 0 2em 0;
-    list-style-type: none;
-    padding: 0;
-    width: 5em;
-
+    columns: 4;
   }
 
   .categories
  li {
-    display:table-cell;
-    cursor: pointer;
+    display: inline-table; /* could use floats here instead */
     position: relative;
     left: 0;
-   
     margin: 0.5em;
-    padding: 0em ;
+    padding: 0.2em ;
     height: 1.6em;
     
     border-radius: 14px;

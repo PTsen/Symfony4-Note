@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriesRestService } from '../categories-rest.service';
+import { Router} from '@angular/router';
 
 
 @Component({
@@ -9,13 +10,15 @@ import { CategoriesRestService } from '../categories-rest.service';
 })
 export class AddcategorieComponent implements OnInit {
 categorie:string; 
-  constructor(private categoriesRestService : CategoriesRestService) { }
+  constructor(private categoriesRestService : CategoriesRestService,
+  private router: Router) { }
 
   ngOnInit() {
   }
 
 saveCat(){
   this.categoriesRestService.addCategorie(this.categorie).subscribe(); 
+  this.router.navigate(['/']);
 }
 
 }

@@ -96,13 +96,6 @@ class ApiNoteAngular extends Controller
             $em = $this -> getDoctrine() 
             -> getRepository (Note::class)->find($id);
 
-            /*
-            $encoder = array(new JsonEncoder());
-            $normalizers= array(new ObjectNormalizer());
-            $serializer = new Serializer ($normalizers,$encoder);
-            $data =  $serializer->serialize($em, 'json');
-            */
-
             $data = $this->get('serializer')->serialize($em, 'json');
 
 
@@ -164,6 +157,7 @@ class ApiNoteAngular extends Controller
 
     
     /**
+     * Function qui supprime une note
      * @Route("/apiAngular/note/delete/{id}", name="apiAngular_note_delete")
      * @Method({"DELETE","OPTIONS"})
      */
@@ -212,7 +206,9 @@ class ApiNoteAngular extends Controller
     }
 
 
-      /**
+     /**
+     * Fonction s occupe de la modification d une note.
+     * #param, Request la note qui doit etre modifie 
      * @Route("/apiAngular/note/put", name="apiAngular_note_put")
      *  @Method({"PUT","OPTIONS"})
      */
@@ -272,62 +268,6 @@ class ApiNoteAngular extends Controller
 
     }
 
-     /**
-     * @Route("/apiAngular/note/search", name="apiAngular_note_search")
-     * @Method({"POST","OPTIONS"})
-     */
-    public function search_(Request $request)
-    {
-
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-			
-        }else{
-            $tag = $request->getContent();
-            
-            /*
-            $entityManager = $this->getDoctrine()->getManager();
-            $em = $entityManager-> getRepository (Note::class)->findall();
-            $tab = array();
-
-                foreach($em as $note) { 
-                
-                    $xmlCrawler = new Crawler();
-                    $xmlCrawler->addXmlContent($note->getNote());
-                    $txt=" ";
-
-                    try {
-        
-                        if( $xmlCrawler->filterXPath('//note/tag')->count()){
-                            $txt = $xmlCrawler->filterXPath('//note/tag')->text();
-                        }
-
-                    }catch (\Exception $ex){
-                        $response = new JsonResponse(array(
-                            'status'=>'500',
-                            'message'=>'Content is not valid'));
-                            return $response;                    }
-        
-                    if ($txt == $tag){
-                        array_push($tab, $note);   
-                    }       
-
-                }
-*/
-        }
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-        $response->setContent($tag);
-        return $response;
-    }
 }
 
 

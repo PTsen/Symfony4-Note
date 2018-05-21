@@ -10,10 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Categorie;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -24,63 +22,39 @@ class ApiCategorie extends Controller
     
     /**
      * @Route("/api/categorie/list", name="api_categorie_list")
-     * @Method({"GET","OPTIONS"})
+     * @Method("GET")
      */
     public function select(Request $request)
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-
-            $response = new Response();
-
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-
-        }else {
 
         $em = $this -> getDoctrine() 
         -> getRepository (Categorie::class)->findall();
         $encoder = array(new JsonEncoder());
         $normalizers= array(new ObjectNormalizer());
         $serializer = new Serializer ($normalizers,$encoder);
-
         $data =  $serializer->serialize($em, 'json');
-        
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        
         $response->setContent($data);
-        }
         return $response;
         
     }
 
  /**
      * @Route("/api/categorie/create", name="api_categorie_create")
-     * @Method({"POST","OPTIONS"})
+     * @Method("POST")
      */
     public function create(Request $request,string $cat)
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-
-            $response = new Response();
-
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-			
-
-        }else{
+       
 
             $data = $request->getContent();
             $elem = json_decode($data,true);
-            $cat=new Categorie();
+            $cat=new Categorie();            
             $cat->setCategorie($elem['categorie']);
             $em=$this->getDoctrine()->getManager();
 
@@ -97,29 +71,19 @@ class ApiCategorie extends Controller
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-        }
-        return $response;
+            $response->setContent("Done");
+            return $response;
     }
 
     
     /**
      * @Route("/api/categorie/delete/{id}", name="api_categorie_delete")
-     * @Method({"DELETE","OPTIONS"})
+     * @Method("DELETE")
      */
     public function delet_(Request $request, $id)
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-
-            $response = new Response();
-
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-			
-
-        }else{
+        
 
             $data = $request->getContent();
             $elem = json_decode($data,true);
@@ -139,7 +103,7 @@ class ApiCategorie extends Controller
             $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-        }
+            $response->setContent("Done");       
 			return $response;
         
     }
@@ -147,20 +111,12 @@ class ApiCategorie extends Controller
 
       /**
      * @Route("/api/categorie/put", name="api_categorie_put")
-     * @Method({"PUT","OPTIONS"})
+     * @Method("PUT")
      */
     public function update_(Request $request)
     {
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 
-            $response = new Response();
-            $response->headers->set('Content-Type', 'application/json');
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-			
-        }else{
         $data = $request->getContent();
         $elem = json_decode($data,true);
         $id = $elem['id'];
@@ -182,9 +138,7 @@ class ApiCategorie extends Controller
             $response->headers->set('Access-Control-Allow-Origin', '*');
             $response->headers->set("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             $response->headers->set("Access-Control-Allow-Headers", 'Content-Type',true);
-
-		}
- 
+            $response->setContent("Done");
             return $response;
 
     }
